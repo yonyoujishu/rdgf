@@ -63,15 +63,19 @@ lazy_static::lazy_static! {
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
         option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()
     );   
+     //ID服务器列表，读取Repository secrets值
     pub static ref RENDEZVOUS_SERVERS: Vec<String> = {
-        let s = option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com");
-        vec![s.to_string()]
-    };   
-    //Key，读取Repository secrets值
-    pub static ref RS_PUB_KEY: Vec<String> = {
-        let s = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=");
-        vec![s.to_string()]
-    }; 
+        option_env!("RENDEZVOUS_SERVER")
+            .unwrap_or("rs-ny.rustdesk.com")
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .collect()
+    };
+    //公钥，读取Repository secrets值
+    pub static ref RS_PUB_KEY: String = 
+        option_env!("RS_PUB_KEY")
+            .unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=")
+            .to_string();
      //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
         option_env!("APP_NAME").unwrap_or("RustDesk").into()
@@ -182,8 +186,32 @@ const CHARS: &[char] = &[
 //         None => "rs-ny.rustdesk.com"
 //     }
 // ];
+let s = EXE_RENDEZVOUS_SERVER.read().unwrap().clone();
+    if !s.is_empty() {
+        return vec![s];
+    }
+    let s = Self::get_option("custom-rendezvous-server");
+    if !s.is_empty() {
+        return vec![s];
+    }
+    let s = PROD_RENDEZVOUS_SERVER.read().unwrap().clone();
+    if !s.is_empty() {
+        return vec![s];
+    }
+    let serial_obsolute = CONFIG2.read().unwrap().serial > SERIAL;
+    if serial_obsolute {
+        let ss: Vec<String> = Self::get_option("rendezvous-servers")
+            .split(',')
+            .filter(|x| x.contains('.'))
+            .map(|x| x.to_owned())
+            .collect();
+        if !ss.is_empty() {
+            return ss;
+        }
+    }
+    return RENDEZVOUS_SERVERS.clone();
 //公钥KEY，读取Repository secrets值
-//pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
+pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
 // pub const RS_PUB_KEY: &[&str] = &[
 //     match option_env!("RS_PUB_KEY") {
 //         Some(server) => server,
