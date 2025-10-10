@@ -63,6 +63,15 @@ lazy_static::lazy_static! {
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
         option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()
     );   
+    pub static ref RENDEZVOUS_SERVER: Vec<String> = {
+        let s = option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com");
+        vec![s.to_String()]
+    };   
+    //Key，读取Repository secrets值
+    pub static ref RS_PUB_KEY: Vec<String> = {
+        let s = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=");
+        vec![s.to_String()]
+    }; 
      //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
         option_env!("APP_NAME").unwrap_or("RustDesk").into()
@@ -167,20 +176,20 @@ const CHARS: &[char] = &[
 
 //ID服务器，读取Repository secrets值
 //pub const RENDEZVOUS_SERVERS: &[&str] = &[option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()];
-pub const RENDEZVOUS_SERVERS: &[&str] = &[
-    match option_env!("RENDEZVOUS_SERVER") {
-        Some(server) => server,
-        None => "rs-ny.rustdesk.com"
-    }
-];
+// pub const RENDEZVOUS_SERVERS: &[&str] = &[
+//     match option_env!("RENDEZVOUS_SERVER") {
+//         Some(server) => server,
+//         None => "rs-ny.rustdesk.com"
+//     }
+// ];
 //公钥KEY，读取Repository secrets值
 //pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
-pub const RS_PUB_KEY: &[&str] = &[
-    match option_env!("RS_PUB_KEY") {
-        Some(server) => server,
-        None => "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
-    }
-];
+// pub const RS_PUB_KEY: &[&str] = &[
+//     match option_env!("RS_PUB_KEY") {
+//         Some(server) => server,
+//         None => "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
+//     }
+// ];
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
 pub const WS_RENDEZVOUS_PORT: i32 = 21118;
