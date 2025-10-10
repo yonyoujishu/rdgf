@@ -1288,6 +1288,9 @@ pub async fn get_key(sync: bool) -> String {
     };
     if key.is_empty() {
         key = config::RS_PUB_KEY.to_owned();
+        // key = config::RS_PUB_KEY.first()
+        // .map(|s| s.to_owned())
+        // .unwrap_or_default();
     }
     key
 }

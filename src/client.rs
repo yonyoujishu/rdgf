@@ -1791,6 +1791,10 @@ impl LoginConfigHandler {
             let args = server_key.next().unwrap_or_default();
             let key = if server == PUBLIC_SERVER {
                 config::RS_PUB_KEY.to_owned()
+               // 将 Vec<&str> 转换为 String（这里假设取第一个元素）
+                // config::RS_PUB_KEY.first()
+                // .map(|s| s.to_owned())
+                // .unwrap_or_default()
             } else {
                 let mut args_map: HashMap<String, &str> = HashMap::new();
                 for arg in args.split('&') {
