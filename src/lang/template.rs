@@ -396,6 +396,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("One-time password length", ""),
         ("Request access to your device", ""),
         ("Hide connection management window", ""),
+        //修复隐藏托盘图标功能：
+        ("Hide Tray", ""),
         ("hide_cm_tip", ""),
         ("wayland_experiment_tip", ""),
         ("Right click to select tabs", ""),
@@ -631,6 +633,8 @@ pub static ref T: std::collections::HashMap<&'static str, &'static str> =
         ("Unlock with PIN", ""),
         ("Requires at least {} characters", ""),
         ("Wrong PIN", ""),
+        ("PIN Code", ""),
+        ("Verify PIN", ""),
         ("Set PIN", ""),
         ("Enable trusted devices", ""),
         ("Manage trusted devices", ""),

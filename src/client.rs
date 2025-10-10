@@ -2209,7 +2209,8 @@ impl LoginConfigHandler {
             msg.image_quality = q.into();
         } else if q == "custom" {
             let config = self.load_config();
-            let allow_more = !crate::using_public_server() || self.direct == Some(true);
+            // 解除画质和FPS自定义限值
+            let allow_more = true;
             let quality = if config.custom_image_quality.is_empty() {
                 50
             } else {
@@ -3829,11 +3830,7 @@ pub fn check_if_retry(msgtype: &str, title: &str, text: &str, retry_for_relay: b
         && ((text.contains("10054") || text.contains("104")) && retry_for_relay
             || (!text.to_lowercase().contains("offline")
                 && !text.to_lowercase().contains("not exist")
-                && (!text.to_lowercase().contains("handshake")
-                    // https://github.com/snapview/tungstenite-rs/blob/e7e060a89a72cb08e31c25a6c7284dc1bd982e23/src/error.rs#L248
-                    || text
-                        .to_lowercase()
-                        .contains("connection reset without closing handshake") && use_ws())
+                && !text.to_lowercase().contains("handshake")                    
                 && !text.to_lowercase().contains("failed")
                 && !text.to_lowercase().contains("resolve")
                 && !text.to_lowercase().contains("mismatch")
