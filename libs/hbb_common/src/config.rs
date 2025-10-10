@@ -63,14 +63,14 @@ lazy_static::lazy_static! {
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
         option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()
     );   
-    pub static ref RENDEZVOUS_SERVER: Vec<String> = {
+    pub static ref RENDEZVOUS_SERVERS: Vec<String> = {
         let s = option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com");
-        vec![s.to_String()]
+        vec![s.to_string()]
     };   
     //Key，读取Repository secrets值
     pub static ref RS_PUB_KEY: Vec<String> = {
         let s = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=");
-        vec![s.to_String()]
+        vec![s.to_string()]
     }; 
      //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
