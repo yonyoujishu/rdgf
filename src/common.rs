@@ -1025,7 +1025,7 @@ fn get_api_server_(api: String, custom: String) -> String {
         }
     }
     //API服务器，读取Repository secrets值
-    option_env!("API_SERVER").unwrap_or("https://admin.rustdesk.com").to_owned()
+    option_env!("API_SERVER").unwrap_or("https://admin.rustdesk.com").into().to_owned()
 }
 
 #[inline]
