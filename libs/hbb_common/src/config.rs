@@ -65,7 +65,7 @@ lazy_static::lazy_static! {
     };
     //公钥，读取Repository secrets值
     pub static ref RS_PUB_KEY: String = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").to_string();
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock: :new("".to_owned());
+    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new("".to_owned());
     pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
     //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
