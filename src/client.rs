@@ -759,7 +759,8 @@ impl Client {
         conn: &mut Stream,
     ) -> ResultType<Option<Vec<u8>>> {
         let rs_pk = get_rs_pk(if key.is_empty() {
-            config::RS_PUB_KEY
+            //语句开头加&，对 config::RS_PUB_KEY 进行借用
+            &config::RS_PUB_KEY
         } else {
             key
         });
