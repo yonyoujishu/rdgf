@@ -166,21 +166,21 @@ const CHARS: &[char] = &[
 ];
 
 //ID服务器，读取Repository secrets值
-pub const RENDEZVOUS_SERVERS: &[&str] = &[option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()];
-// pub const RENDEZVOUS_SERVERS: &[&str] = &[
-//     match option_env!("RENDEZVOUS_SERVER") {
-//         Some(server) => server,
-//         None => "rs-ny.rustdesk.com"
-//     }
-// ];
+//pub const RENDEZVOUS_SERVERS: &[&str] = &[option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()];
+pub const RENDEZVOUS_SERVERS: &[&str] = &[
+    match option_env!("RENDEZVOUS_SERVER") {
+        Some(server) => server,
+        None => "rs-ny.rustdesk.com"
+    }
+];
 //公钥KEY，读取Repository secrets值
-pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
-// pub const RS_PUB_KEY: &[&str] = &[
-//     match option_env!("RS_PUB_KEY") {
-//         Some(server) => server,
-//         None => "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
-//     }
-// ];
+//pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
+pub const RS_PUB_KEY: &[&str] = &[
+    match option_env!("RS_PUB_KEY") {
+        Some(server) => server,
+        None => "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
+    }
+];
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
 pub const WS_RENDEZVOUS_PORT: i32 = 21118;
