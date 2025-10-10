@@ -56,30 +56,21 @@ lazy_static::lazy_static! {
     static ref STATUS: RwLock<Status> = RwLock::new(Status::load());
     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
-    //ID服务器，读取Repository secrets值
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()
-    );
-    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(
-        option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()
-    );   
-     //ID服务器列表，读取Repository secrets值
+    //ID服务器列表，读取Repository secrets值
     pub static ref RENDEZVOUS_SERVERS: Vec<String> = {
-        option_env!("RENDEZVOUS_SERVER")
-            .unwrap_or("rs-ny.rustdesk.com")
+        option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com")
             .split(',')
             .map(|s| s.trim().to_string())
             .collect()
     };
     //公钥，读取Repository secrets值
-    pub static ref RS_PUB_KEY: String = 
-        option_env!("RS_PUB_KEY")
-            .unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=")
-            .to_string();
-     //应用名称，读取Repository secrets值
+    pub static ref RS_PUB_KEY: String = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").to_string();
+    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock: :new("".to_owned());
+    pub static ref EXE_RENDEZVOUS_SERVER: RwLock<String> = Default::default();
+    //应用名称，读取Repository secrets值
     pub static ref APP_NAME: RwLock<String> = RwLock::new(
         option_env!("APP_NAME").unwrap_or("RustDesk").into()
-    );
+    );    
     static ref KEY_PAIR: Mutex<Option<KeyPair>> = Default::default();
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
@@ -107,10 +98,9 @@ lazy_static::lazy_static! {
         //隐藏托盘图标，approve-mode=password，verification-method=use-permanent-password，才可生效，项目中有修复代码
         map.insert("hide-tray".to_string(), "Y".to_string());
         RwLock::new(map)
-
     };
     pub static ref OVERWRITE_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
-    pub static ref DEFAULT_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> ={
+    pub static ref DEFAULT_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> = {
         let mut map = HashMap::new();
         //显示模式，adaptive：适应窗口，original：原始尺寸，
         map.insert("view_style".to_string(), "adaptive".to_string());
@@ -178,46 +168,10 @@ const CHARS: &[char] = &[
     'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 ];
 
-//ID服务器，读取Repository secrets值
-//pub const RENDEZVOUS_SERVERS: &[&str] = &[option_env!("RENDEZVOUS_SERVER").unwrap_or("rs-ny.rustdesk.com").into()];
-// pub const RENDEZVOUS_SERVERS: &[&str] = &[
-//     match option_env!("RENDEZVOUS_SERVER") {
-//         Some(server) => server,
-//         None => "rs-ny.rustdesk.com"
-//     }
-// ];
-let s = EXE_RENDEZVOUS_SERVER.read().unwrap().clone();
-    if !s.is_empty() {
-        return vec![s];
-    }
-    let s = Self::get_option("custom-rendezvous-server");
-    if !s.is_empty() {
-        return vec![s];
-    }
-    let s = PROD_RENDEZVOUS_SERVER.read().unwrap().clone();
-    if !s.is_empty() {
-        return vec![s];
-    }
-    let serial_obsolute = CONFIG2.read().unwrap().serial > SERIAL;
-    if serial_obsolute {
-        let ss: Vec<String> = Self::get_option("rendezvous-servers")
-            .split(',')
-            .filter(|x| x.contains('.'))
-            .map(|x| x.to_owned())
-            .collect();
-        if !ss.is_empty() {
-            return ss;
-        }
-    }
-    return RENDEZVOUS_SERVERS.clone();
-//公钥KEY，读取Repository secrets值
-pub const RS_PUB_KEY: &str = option_env!("RS_PUB_KEY").unwrap_or("OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=").into();
-// pub const RS_PUB_KEY: &[&str] = &[
-//     match option_env!("RS_PUB_KEY") {
-//         Some(server) => server,
-//         None => "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw="
-//     }
-// ];
+//不再使用常量，同名在 lazy_static! 获取
+//pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
+//pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
+
 pub const RENDEZVOUS_PORT: i32 = 21116;
 pub const RELAY_PORT: i32 = 21117;
 pub const WS_RENDEZVOUS_PORT: i32 = 21118;
@@ -872,7 +826,7 @@ impl Config {
         }
         rendezvous_server
     }
-
+    // lazy_static! 加载同名常量
     pub fn get_rendezvous_servers() -> Vec<String> {
         let s = EXE_RENDEZVOUS_SERVER.read().unwrap().clone();
         if !s.is_empty() {
@@ -897,7 +851,7 @@ impl Config {
                 return ss;
             }
         }
-        return RENDEZVOUS_SERVERS.iter().map(|x| x.to_string()).collect();
+        return RENDEZVOUS_SERVERS.clone();
     }
 
     pub fn reset_online() {
