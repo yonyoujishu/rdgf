@@ -291,7 +291,8 @@ impl Client {
         } else {
             if other_server == PUBLIC_SERVER {
                 (
-                    check_port(RENDEZVOUS_SERVERS[0], RENDEZVOUS_PORT),
+                    //clone() 方法会创建字符串的一个副本，这样既可以将所需的值传递给 check_port 函数，又不会移动原始向量中的元素，保持了向量的完整性。
+                    check_port(RENDEZVOUS_SERVERS[0].clone(), RENDEZVOUS_PORT),
                     RENDEZVOUS_SERVERS[1..]
                         .iter()
                         .map(|x| x.to_string())
