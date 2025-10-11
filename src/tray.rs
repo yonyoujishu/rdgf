@@ -209,7 +209,7 @@ fn make_tray() -> hbb_common::ResultType<()> {
                         .map(|t| t.set_tooltip(Some(tooltip(count))));
                 }
                 // 隐藏托盘图标
-                                Data::HideTray(hide) => {
+                Data::HideTray(hide) => {
                     let mut tray_guard = _tray_icon.lock().unwrap();
                     if hide {
                         // 销毁图标对象以隐藏
