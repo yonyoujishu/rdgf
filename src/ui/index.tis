@@ -83,7 +83,7 @@ class ShareRdp: Reactor.Component {
         var pin = handler.get_unlock_pin();
         var has_pin = pin && pin.length > 0;
         var pin_locked = has_pin && !menu_unlocked;
-        return <li disabled={pin_locked ? "true" : "false"} class={cls}><span>{svg_checkmark}</span>{rdp_shared_string}</li>;    
+        return <li disabled={pin_locked ? "true" : "false"} class={cls}><span>{svg_checkmark}</span>{rdp_shared_string}</li>;
     }
     
     function onClick() {
